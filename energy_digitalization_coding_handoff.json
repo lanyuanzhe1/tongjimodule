@@ -1,0 +1,299 @@
+{
+  "project_name": "能源数字化对区域碳减排的影响机制与预测研究",
+  "document_type": "coding_handoff",
+  "goal": [
+    "构建能源数字化综合指数",
+    "识别能源数字化对区域碳减排的影响",
+    "拆解作用机制",
+    "构建可解释机器学习预测系统"
+  ],
+  "architecture": {
+    "main_layer": {
+      "scope": "全国30省级地区",
+      "period": "2011-2023",
+      "purpose": [
+        "主识别",
+        "机制分析",
+        "稳健性检验",
+        "机器学习预测"
+      ]
+    },
+    "case_layer": {
+      "scope": [
+        "江苏",
+        "南京",
+        "苏州"
+      ],
+      "period": "以已收集年份为准",
+      "purpose": [
+        "案例展示",
+        "区域时序可视化",
+        "情景说明"
+      ],
+      "notes": "不承担主识别任务"
+    }
+  },
+  "data_schema": {
+    "primary_keys": [
+      "province",
+      "year"
+    ],
+    "case_keys": [
+      "city",
+      "year"
+    ],
+    "tables": [
+      "raw_*",
+      "clean_*",
+      "panel_master",
+      "case_city_panel"
+    ]
+  },
+  "variables": {
+    "target": {
+      "main": "carbon_intensity_ln = ln(CO2 / GDP)",
+      "alternatives": [
+        "carbon_per_capita_ln = ln(CO2 / population)",
+        "co2_total_ln = ln(CO2_total)"
+      ]
+    },
+    "core_explanatory": {
+      "name": "energy_digital_index",
+      "dimensions": {
+        "digital_infrastructure": [
+          "broadband_users",
+          "mobile_internet_users",
+          "5g_base_stations",
+          "optical_cable_length",
+          "iot_terminal_users"
+        ],
+        "energy_digital_application": [
+          "charging_infrastructure",
+          "electricity_market_volume",
+          "green_power_trade_volume",
+          "green_certificate_volume",
+          "renewable_installation_share"
+        ],
+        "digital_industry_support": [
+          "software_revenue",
+          "telecom_revenue",
+          "it_service_revenue",
+          "digital_core_industry_share",
+          "high_tech_industry_share",
+          "rd_intensity"
+        ]
+      }
+    },
+    "controls": [
+      "pgdp_ln",
+      "pgdp_ln_sq",
+      "ind2_share",
+      "urban_rate",
+      "coal_share",
+      "open_rate",
+      "env_gov",
+      "pop_density_ln"
+    ],
+    "mechanisms": {
+      "energy_structure": [
+        "coal_share",
+        "renewable_share",
+        "clean_power_share"
+      ],
+      "green_innovation": [
+        "green_patent_ln",
+        "rd_intensity",
+        "tech_market_turnover_ln"
+      ],
+      "industrial_upgrade_efficiency": [
+        "tertiary_secondary_ratio",
+        "energy_intensity_ln",
+        "industrial_energy_efficiency"
+      ]
+    }
+  },
+  "index_methods": {
+    "main": "entropy_weight",
+    "robustness": [
+      "pca",
+      "equal_weight_sum"
+    ],
+    "rules": [
+      "统一指标方向",
+      "先缩尾再标准化",
+      "缺失处理后再入指数",
+      "输出总指数和子指数",
+      "输出权重表"
+    ]
+  },
+  "econometric_models": {
+    "baseline": "two_way_fixed_effects",
+    "equation": "Y_it = beta * ED_it + gamma * X_it + mu_i + lambda_t + epsilon_it",
+    "standard_errors": [
+      "clustered_by_province",
+      "driscoll_kraay"
+    ],
+    "required_outputs": [
+      "descriptive_statistics",
+      "correlation_matrix",
+      "baseline_regression_table",
+      "mechanism_regression_table",
+      "heterogeneity_table",
+      "robustness_table"
+    ]
+  },
+  "mechanism_design": {
+    "approach": "panel_mediation_like_framework",
+    "steps": [
+      "M_it = a * ED_it + controls + FE",
+      "Y_it = c_prime * ED_it + b * M_it + controls + FE"
+    ],
+    "required_paths": [
+      "energy_structure",
+      "green_innovation",
+      "industrial_upgrade_efficiency"
+    ]
+  },
+  "robustness": [
+    "replace_target_variable",
+    "replace_index_construction_method",
+    "lag_core_variable_by_one_period",
+    "winsorize_and_rerun",
+    "subsample_sensitivity",
+    "driscoll_kraay_standard_errors"
+  ],
+  "heterogeneity": [
+    "east_middle_west",
+    "high_vs_low_digitalization",
+    "high_vs_low_coal_dependence"
+  ],
+  "ml_system": {
+    "target": "carbon_intensity_ln_lead1",
+    "feature_groups": {
+      "structural": [
+        "ind2_share",
+        "urban_rate",
+        "open_rate",
+        "coal_share"
+      ],
+      "digital": [
+        "energy_digital_index",
+        "sub_indices",
+        "5g_base_stations",
+        "broadband_users",
+        "software_revenue"
+      ],
+      "dynamic": [
+        "carbon_intensity_lag1",
+        "energy_digital_index_lag1",
+        "energy_intensity_lag1"
+      ],
+      "interactions_and_growth": [
+        "digital_x_coal_share",
+        "digital_x_ind2_share",
+        "digital_yoy_growth",
+        "carbon_intensity_yoy_change"
+      ]
+    },
+    "models": [
+      "elastic_net",
+      "random_forest",
+      "xgboost",
+      "lightgbm"
+    ],
+    "validation": "rolling_time_validation",
+    "metrics": [
+      "rmse",
+      "mae",
+      "r2"
+    ]
+  },
+  "shap": {
+    "required_plots": [
+      "summary_beeswarm",
+      "bar_plot",
+      "dependence_plot",
+      "interaction_plot_optional"
+    ],
+    "focus_features": [
+      "energy_digital_index",
+      "coal_share",
+      "green_patent_ln",
+      "rd_intensity",
+      "carbon_intensity_lag1",
+      "ind2_share"
+    ],
+    "purpose": "将机器学习预测贡献与固定效应平均方向进行对应解释"
+  },
+  "cleaning_rules": {
+    "naming": "snake_case_english",
+    "missing_values": [
+      "中间年份少量缺失可线性插值",
+      "首尾大段缺失不外推",
+      "缺失严重变量先保留接口"
+    ],
+    "outliers": "winsorize at 1% or 2.5%",
+    "logging": [
+      "cleaning_log.md",
+      "variable_dict.xlsx"
+    ]
+  },
+  "deliverables": {
+    "data": [
+      "panel_master.csv",
+      "case_city_panel.csv",
+      "energy_digital_index_entropy.csv",
+      "energy_digital_index_pca.csv",
+      "energy_digital_index_equal.csv"
+    ],
+    "figures": [
+      "tech_route.png",
+      "index_timeseries.png",
+      "regional_comparison.png",
+      "fe_coefficients.png",
+      "shap_beeswarm.png",
+      "shap_bar.png",
+      "pred_vs_actual.png"
+    ],
+    "tables": [
+      "descriptive_stats.csv",
+      "correlation_matrix.csv",
+      "baseline_regression.csv",
+      "mechanism_results.csv",
+      "heterogeneity_results.csv",
+      "robustness_results.csv",
+      "ml_metrics.csv"
+    ]
+  },
+  "execution_order": [
+    "ingest_raw_data",
+    "clean_and_merge",
+    "build_derived_variables",
+    "build_energy_digital_index",
+    "run_descriptive_stats",
+    "run_baseline_fe",
+    "run_mechanism_models",
+    "run_heterogeneity",
+    "run_robustness",
+    "engineer_ml_features",
+    "run_rolling_validation",
+    "train_ml_models",
+    "run_shap",
+    "export_all_outputs"
+  ],
+  "acceptance_criteria": [
+    "生成可直接建模的省级面板主表",
+    "生成3种能源数字化指数版本",
+    "跑通双向固定效应主模型",
+    "输出至少1套机制分析结果",
+    "跑通至少3个预测模型",
+    "产出SHAP全局解释图",
+    "全流程可复现"
+  ],
+  "known_constraints": [
+    "当前江苏/南京/苏州案例数据存在较多NA和口径不齐问题",
+    "案例层更适合展示而非主识别",
+    "主线应保持绿色发展/双碳 + 统计严谨性 + AI解释闭环",
+    "先保证数据结构正确与流程可复现，再追求模型复杂度"
+  ]
+}

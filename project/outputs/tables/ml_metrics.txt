@@ -1,0 +1,6 @@
+--- XGBoost Performance Metrics ---
+Train CV R2 (5-Fold): 0.8016 (std: 0.1269)
+Train Set R2:         0.9999
+Test Set R2:          0.8251
+Test RMSE:            0.3392
+Test MAE:             0.2572

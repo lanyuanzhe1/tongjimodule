@@ -1,0 +1,35 @@
+                           PanelOLS Estimation Summary                           
+=================================================================================
+Dep. Variable:     carbon_intensity_ln   R-squared:                        0.1323
+Estimator:                    PanelOLS   R-squared (Between):              0.2091
+No. Observations:                  210   R-squared (Within):               0.7236
+Date:                 Tue, Apr 14 2026   R-squared (Overall):              0.2234
+Time:                         20:46:09   Log-likelihood                    249.37
+Cov. Estimator:         Driscoll-Kraay                                           
+                                         F-statistic:                      6.4790
+Entities:                           30   P-value                           0.0001
+Avg Obs:                        7.0000   Distribution:                   F(4,170)
+Min Obs:                        7.0000                                           
+Max Obs:                        7.0000   F-statistic (robust):             563.79
+                                         P-value                           0.0000
+Time periods:                        7   Distribution:                   F(4,170)
+Avg Obs:                        30.000                                           
+Min Obs:                        30.000                                           
+Max Obs:                        30.000                                           
+                                                                                 
+                                    Parameter Estimates                                     
+============================================================================================
+                          Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
+--------------------------------------------------------------------------------------------
+const                        2.1797     1.7770     1.2266     0.2217     -1.3282      5.6876
+energy_digital_index_100     0.1102     0.0763     1.4451     0.1503     -0.0403      0.2608
+pgdp_ln                     -0.4981     0.1844    -2.7006     0.0076     -0.8621     -0.1340
+ind2_share                   1.5948     0.7486     2.1303     0.0346      0.1170      3.0726
+urban_rate                  -2.7037     0.6637    -4.0738     0.0001     -4.0138     -1.3936
+============================================================================================
+
+F-test for Poolability: 307.92
+P-value: 0.0000
+Distribution: F(35,170)
+
+Included effects: Entity, Time

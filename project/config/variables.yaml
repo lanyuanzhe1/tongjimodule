@@ -1,0 +1,52 @@
+target:
+  main: "carbon_intensity_ln"
+  alternatives:
+    - "carbon_per_capita_ln"
+    - "co2_total_ln"
+
+core_explanatory:
+  name: "energy_digital_index"
+  dimensions:
+    digital_infrastructure:
+      - "broadband_users"
+      - "mobile_internet_users"
+      - "5g_base_stations"
+      - "optical_cable_length"
+      - "iot_terminal_users"
+    energy_digital_application:
+      - "charging_infrastructure"
+      - "electricity_market_volume"
+      - "green_power_trade_volume"
+      - "green_certificate_volume"
+      - "renewable_installation_share"
+    digital_industry_support:
+      - "software_revenue"
+      - "telecom_revenue"
+      - "it_service_revenue"
+      - "digital_core_industry_share"
+      - "high_tech_industry_share"
+      - "rd_intensity"
+
+controls:
+  - "pgdp_ln"
+  - "pgdp_ln_sq"
+  - "ind2_share"
+  - "urban_rate"
+  - "coal_share"
+  - "open_rate"
+  - "env_gov"
+  - "pop_density_ln"
+
+mechanisms:
+  energy_structure:
+    - "coal_share"
+    - "renewable_share"
+    - "clean_power_share"
+  green_innovation:
+    - "green_patent_ln"
+    - "rd_intensity"
+    - "tech_market_turnover_ln"
+  industrial_upgrade_efficiency:
+    - "tertiary_secondary_ratio"
+    - "energy_intensity_ln"
+    - "industrial_energy_efficiency"
