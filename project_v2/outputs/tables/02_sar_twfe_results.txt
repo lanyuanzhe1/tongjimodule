@@ -1,0 +1,25 @@
+Spatial panel fixed effects lag model
+ 
+
+Call:
+spml(formula = fm_twfe, data = pdf, listw = lw_cont, model = "within", 
+    effect = "twoways", lag = TRUE, spatial.error = "none")
+
+Residuals:
+      Min.    1st Qu.     Median    3rd Qu.       Max. 
+-0.2770822 -0.0433159  0.0017159  0.0467799  0.2113436 
+
+Spatial autoregressive coefficient:
+        Estimate Std. Error t-value Pr(>|t|)   
+lambda -0.260072   0.096526 -2.6943 0.007053 **
+
+Coefficients:
+                            Estimate Std. Error t-value  Pr(>|t|)    
+energy_digital_index_100_ln  0.22032    0.24790  0.8887   0.37414    
+pgdp_ln                     -0.42301    0.19319 -2.1896   0.02855 *  
+ind2_share                   1.19335    0.49094  2.4308   0.01507 *  
+urban_rate                  -3.37056    0.79007 -4.2662 1.989e-05 ***
+coal_share                   0.52144    0.17712  2.9440   0.00324 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+

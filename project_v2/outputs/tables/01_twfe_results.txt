@@ -1,0 +1,26 @@
+Twoways effects Within Model
+
+Call:
+plm(formula = fm_twfe, data = pdf, effect = "twoways", model = "within")
+
+Balanced Panel: n = 30, T = 7, N = 210
+
+Residuals:
+      Min.    1st Qu.     Median    3rd Qu.       Max. 
+-0.2769284 -0.0491235  0.0051929  0.0485836  0.2188323 
+
+Coefficients:
+                            Estimate Std. Error t-value  Pr(>|t|)    
+energy_digital_index_100_ln  0.23513    0.28271  0.8317 0.4067523    
+pgdp_ln                     -0.46186    0.21988 -2.1005 0.0371655 *  
+ind2_share                   1.36348    0.55881  2.4400 0.0157219 *  
+urban_rate                  -3.50057    0.89884 -3.8946 0.0001415 ***
+coal_share                   0.53277    0.20136  2.6459 0.0089167 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Total Sum of Squares:    1.3181
+Residual Sum of Squares: 1.0982
+R-Squared:      0.16681
+Adj. R-Squared: -0.030396
+F-statistic: 6.76695 on 5 and 169 DF, p-value: 8.9106e-06

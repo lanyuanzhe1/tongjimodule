@@ -1,0 +1,35 @@
+Spatial w2sls model 
+
+Call:
+spgm(formula = fm_sdm, data = pdf, listw = lw_dist, Durbin = TRUE, 
+    model = "within", lag = TRUE, spatial.error = FALSE, method = "w2sls")
+
+Residuals:
+       Min.     1st Qu.      Median     3rd Qu.        Max. 
+-0.24530308 -0.03959251  0.00085485  0.04161317  0.17119216 
+
+Spatial autoregressive coefficient:
+       Estimate Std. Error t-value Pr(>|t|)
+lambda  -1.3890     1.1311  -1.228   0.2194
+
+Coefficients:
+                                  Estimate Std. Error t-value  Pr(>|t|)    
+energy_digital_index_100_ln       0.426798   0.302610  1.4104  0.158425    
+pgdp_ln                          -0.091811   0.211492 -0.4341  0.664206    
+ind2_share                        0.152038   0.574893  0.2645  0.791423    
+urban_rate                       -4.231160   0.973825 -4.3449 1.393e-05 ***
+coal_share                        0.790411   0.197333  4.0055 6.190e-05 ***
+factor(year)2017                 -0.362780   0.217733 -1.6662  0.095679 .  
+factor(year)2018                 -0.796910   0.422566 -1.8859  0.059311 .  
+factor(year)2019                 -1.084721   0.618056 -1.7551  0.079250 .  
+factor(year)2020                 -1.142436   0.773028 -1.4779  0.139442    
+factor(year)2021                 -1.436943   0.912489 -1.5748  0.115314    
+factor(year)2022                 -1.878008   0.991540 -1.8940  0.058221 .  
+lag_energy_digital_index_100_ln  -0.856398   2.304601 -0.3716  0.710188    
+lag_pgdp_ln                       5.032202   1.728258  2.9117  0.003594 ** 
+lag_ind2_share                  -19.463393   4.666303 -4.1711 3.032e-05 ***
+lag_urban_rate                  -20.290141  11.170271 -1.8164  0.069303 .  
+lag_coal_share                    6.176135   2.026172  3.0482  0.002302 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+

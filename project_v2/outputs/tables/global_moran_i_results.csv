@@ -1,0 +1,15 @@
+﻿Variable,Year,Moran's I (Contiguity),Z-Score (Contiguity),P-Value (Contiguity),Moran's I (Distance),Z-Score (Distance),P-Value (Distance)
+carbon_intensity_ln,2016,0.4233,3.5942,0.0003,0.0812,3.2787,0.001
+carbon_intensity_ln,2017,0.418,3.6219,0.0003,0.075,3.3153,0.0009
+carbon_intensity_ln,2018,0.4223,3.7806,0.0002,0.0805,3.3142,0.0009
+carbon_intensity_ln,2019,0.4255,3.71,0.0002,0.0771,3.1292,0.0018
+carbon_intensity_ln,2020,0.4231,3.6693,0.0002,0.073,3.2402,0.0012
+carbon_intensity_ln,2021,0.4174,3.7038,0.0002,0.0743,3.0731,0.0021
+carbon_intensity_ln,2022,0.4354,3.6846,0.0002,0.0799,3.3884,0.0007
+energy_digital_index_100,2016,0.0334,0.5029,0.615,0.0064,1.2019,0.2294
+energy_digital_index_100,2017,0.0275,0.445,0.6563,0.0062,1.1202,0.2626
+energy_digital_index_100,2018,0.0283,0.6083,0.543,0.0078,1.1975,0.2311
+energy_digital_index_100,2019,0.0516,0.7919,0.4284,0.0128,1.3481,0.1776
+energy_digital_index_100,2020,0.0655,0.8058,0.4203,0.0163,1.4296,0.1528
+energy_digital_index_100,2021,0.0718,0.8409,0.4004,0.0169,1.4453,0.1484
+energy_digital_index_100,2022,0.0908,1.0858,0.2776,0.02,1.5013,0.1333
