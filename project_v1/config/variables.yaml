@@ -1,52 +1,148 @@
-target:
-  main: "carbon_intensity_ln"
-  alternatives:
-    - "carbon_per_capita_ln"
-    - "co2_total_ln"
+# ==========================================
+# 项目变量配置文件 (Variables Configuration)
+# 记录了理论设计的变量框架、代码真实的调用情况以及详细释义
+# ==========================================
 
+# 1. 因变量 (被解释变量, Target Variables)
+target:
+  # 主因变量：对数化碳排放强度 (CO2排放量 / GDP)
+  main: "carbon_intensity_ln"
+  # 替代因变量（用于稳健性检验）
+  alternatives:
+    - "carbon_per_capita_ln" # 对数化人均碳排放
+    - "co2_total_ln"         # 对数化总碳排放量
+
+# 2. 核心解释变量（能源数字化指数, Core Explanatory Variable）的设计与实际使用情况
 core_explanatory:
   name: "energy_digital_index"
+  # 【理论设计维度】（设计规划包含16个指标，划分为3个子维度）
   dimensions:
+    # 2.1 数字基础设施子维度
     digital_infrastructure:
-      - "broadband_users"
-      - "mobile_internet_users"
-      - "5g_base_stations"
-      - "optical_cable_length"
-      - "iot_terminal_users"
+      - "broadband_users"       # 宽带接入用户数 (注: 主指数与06步诊断均实际使用)
+      - "mobile_internet_users" # 移动互联网用户数 (注: 主指数与06步诊断均实际使用)
+      - "5g_base_stations"      # 5G基站数量 (注: 主指数与06步诊断均实际使用)
+      - "optical_cable_length"  # 光缆线路长度 (注: 主指数与06步诊断均实际使用)
+      - "iot_terminal_users"    # 物联网终端用户数 (注: 主指数与06步诊断均实际使用)
+    
+    # 2.2 能源数字化应用子维度
     energy_digital_application:
-      - "charging_infrastructure"
-      - "electricity_market_volume"
-      - "green_power_trade_volume"
-      - "green_certificate_volume"
-      - "renewable_installation_share"
+      - "charging_infrastructure"      # 公共充电桩 (注: 主指数漏算，仅 06 诊断使用了)
+      - "electricity_market_volume"    # 电力市场交易电量 (注: 主指数漏算，仅 06 诊断使用了)
+      - "green_power_trade_volume"     # 绿电交易电量 (注: 主指数漏算，仅 06 诊断使用了)
+      - "green_certificate_volume"     # 绿证交易量 (注: 主指数漏算，仅 06 诊断使用了)
+      - "renewable_installation_share" # 可再生能源装机占比 (注: 主指数漏算，仅 06 诊断使用了)
+    
+    # 2.3 数字产业支撑子维度
     digital_industry_support:
-      - "software_revenue"
-      - "telecom_revenue"
-      - "it_service_revenue"
-      - "digital_core_industry_share"
-      - "high_tech_industry_share"
-      - "rd_intensity"
+      - "software_revenue"            # 软件业务收入 (注: 主指数与06步诊断均实际使用)
+      - "telecom_revenue"             # 电信业务收入 (注: 全部步骤缺失/未提取)
+      - "it_service_revenue"          # IT服务收入 (注: 全部步骤缺失/未提取)
+      - "digital_core_industry_share" # 数字经济核心产业增加值占比 (注: 主指数漏算，仅 06 诊断使用了)
+      - "high_tech_industry_share"    # 高新技术产业占比 (注: 主指数与06步诊断均实际使用)
+      - "rd_intensity"                # 研发强度 (注: 全部步骤缺失/未提取)
 
+  # 【实际被写入主面板 (01_build_panel_master.py) 共同合成综合指数的7个核心变量】
+  actual_used_in_01:
+    - "broadband_users"            # 宽带用户
+    - "mobile_internet_users"      # 移动互联网用户
+    - "5g_base_stations"           # 5G基站
+    - "optical_cable_length"       # 光缆长度
+    - "iot_terminal_users"         # 物联网终端
+    - "software_revenue"           # 软件业务收入
+    - "high_tech_industry_share"   # 高新技术产业占比
+
+  # 【单独在 06_index_diagnosis.py 中被编外引入的变量】
+  extra_used_in_06:
+    - "express_delivery_revenue"   # 快递业务收入 (未在规划内，被当做候选项加入到了数字产业支撑块)
+
+# 3. 控制变量集 (Control Variables)
 controls:
-  - "pgdp_ln"
-  - "pgdp_ln_sq"
-  - "ind2_share"
-  - "urban_rate"
-  - "coal_share"
-  - "open_rate"
-  - "env_gov"
-  - "pop_density_ln"
+  - "pgdp_ln"        # 人均GDP对数 (核心控制控制项)
+  - "pgdp_ln_sq"     # 人均GDP对数的平方 (检验环境库兹涅茨曲线EKC)
+  - "ind2_share"     # 第二产业比重 (产业结构)
+  - "urban_rate"     # 城镇化率
+  - "coal_share"     # 煤炭消费占比 (兼具控制或中介双重属性)
+  - "open_rate"      # 对外开放度
+  - "env_gov"        # 环境规制/治理强度
+  - "pop_density_ln" # 人口密度的对数
 
+# 4. 机制/中介变量 (Mediators for Intermediary Channels)
 mechanisms:
+  # 4.1 能源结构效应
   energy_structure:
-    - "coal_share"
-    - "renewable_share"
-    - "clean_power_share"
+    - "coal_share"         # 煤炭份额 (已在03步机制文件中被实际使用)
+    - "renewable_share"    # 可再生能源份额
+    - "clean_power_share"  # 清洁电力份额
+  # 4.2 绿色技术创新效应
   green_innovation:
-    - "green_patent_ln"
-    - "rd_intensity"
-    - "tech_market_turnover_ln"
+    - "green_patent_ln"           # 绿色专利授权对数
+    - "rd_intensity"              # 研发强度
+    - "tech_market_turnover_ln"   # 技术市场成交额对数
+  # 4.3 产业升级与效率效应
   industrial_upgrade_efficiency:
-    - "tertiary_secondary_ratio"
-    - "energy_intensity_ln"
-    - "industrial_energy_efficiency"
+    - "tertiary_secondary_ratio"     # 用第三与第二产业比值作为高级化指标 (已在03步被实际构造与使用)
+    - "energy_intensity_ln"          # 能源强度对数
+    - "industrial_energy_efficiency" # 工业能源效率
+
+# 5. Pipeline每一步实际采用的变量调用清单摘要 (Pipeline Variables Flow)
+steps_usage:
+  01_build_panel_master:
+    description: "数据清洗与面板构建：使用 actual_used_in_01 中的7个基础指标生成主指数。"
+  
+  02_baseline_fe_regression:
+    target: "carbon_intensity_ln"                # 被解释变量
+    core_explanatory: "energy_digital_index_100" # 核心自变量：100分制综合指数
+    controls:                                    # 实际启用的3个控制变量
+      - "pgdp_ln"
+      - "ind2_share"
+      - "urban_rate"
+      
+  03_mechanism_analysis:
+    target: "carbon_intensity_ln"
+    core_explanatory: "energy_digital_index_100"
+    mediators:                                   # 检验的两个中介变量
+      - "coal_share"
+      - "tertiary_secondary_ratio"
+    controls:
+      - "pgdp_ln"
+      - "ind2_share"
+      - "urban_rate"
+      
+  04_robustness_and_heterogeneity:
+    targets:                                     # 稳健性替换时的因变量
+      - "carbon_intensity_ln"
+      - "carbon_per_capita_ln"
+      - "co2_total_ln"
+    core_explanatory:                            # 稳健性替换主成分指数(PCA)
+      - "energy_digital_index_100"
+      - "energy_digital_index_pca_100"
+    controls:
+      - "pgdp_ln"
+      - "ind2_share"
+      - "urban_rate"
+    split_variables:                             # 划分子样本的异质性变量
+      - "province"
+      - "coal_share"
+      
+  05_ml_forecast_and_shap:
+    target: "carbon_intensity_ln"
+    features:                                    # 扔进 XGBoost 提取特征重要性和偏依赖关系的项的列表
+      - "energy_digital_index_100"
+      - "pgdp_ln"
+      - "ind2_share"
+      - "urban_rate"
+      - "coal_share"                             # 此处作为独立特征用于探测非线性门槛
+      
+  06_index_diagnosis:
+    target: "carbon_intensity_ln"
+    core_explanatory: "energy_digital_index_100"
+    sub_indices_constructed:                     # 按降维重建生成的三个诊断用主成分或熵权子块
+      - "idx_infra_100"
+      - "idx_energy_app_100"
+      - "idx_digital_support_100"
+    controls:                                    # 诊断基准时额外补入了煤炭结构
+      - "pgdp_ln"
+      - "ind2_share"
+      - "urban_rate"
+      - "coal_share"

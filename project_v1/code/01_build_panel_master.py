@@ -210,9 +210,13 @@ def main():
         
     print("Calculating Energy Digital Index (Entropy Method)...")
     index_features = [
-        'broadband_users', 'mobile_internet_users', '5g_base_stations', 
-        'optical_cable_length', 'iot_terminal_users', 'software_revenue', 
-        'high_tech_industry_share'
+        'broadband_users', 
+        'mobile_internet_users', 
+        '5g_base_stations', 
+        'optical_cable_length', 
+        'iot_terminal_users', 
+        'software_revenue', 
+        #'high_tech_industry_share'
     ]
     
     # Filter to only the columns that actually loaded 

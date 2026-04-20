@@ -1,0 +1,97 @@
+# 变量数据字典及清单 (Project V1 Index 基于 0412 全省面板重构版)
+
+target:
+  main: "carbon_intensity_ln"          # 碳排放强度对数 (源自: 碳核算数据库 CEADS)
+  alternatives:
+    - "carbon_per_capita_ln"           # 人均碳排放对数 (源自: CEADS + 分省人口面板数据)
+    - "co2_total_ln"                   # 碳排放总量对数 (源自: CEADS)
+
+# ----------------------------------------------------
+# 核心解释变量体系：省级数字化综合指数 (Digitalization Index)
+# 针对原0411数据缺失，采用0412宏观数字设施、产业与应用数据进行降维合成
+# ----------------------------------------------------
+explanatory_index:
+  name: "ED_index"                     # 我们将其从狭义的ED_core转为更扎实的综合ED_index
+  description: "省级数字化综合指数 (基于基础设施、数字产业化与产业数字化三维度构建)"
+  dimensions:
+    # 维度1：数字基础设施 (Infrastructure)
+    infrastructure:
+      - name: "optical_cable_length"
+        desc: "光缆线路长度(公里)"
+        source: "0412/分省电信主要通行能力_多年期_面板数据.csv"
+      - name: "mobile_internet_traffic"
+        desc: "移动互联网接入流量(万GB) - 反映实际连接负载"
+        source: "0412/分省互联网主要指标_多年期_面板数据.csv"
+      - name: "mobile_internet_users"
+        desc: "移动互联网用户数(万户) - 反映移动端覆盖广度"
+        source: "0412/分省互联网主要指标_多年期_面板数据.csv"
+      - name: "broadband_users"
+        desc: "互联网宽带接入用户(万户) - 反映固定端普及度"
+        source: "0412/分省互联网主要指标_多年期_面板数据.csv"
+    
+    # 维度2：数字产业化 (IT Industry)
+    it_industry:
+      - name: "software_revenue"
+        desc: "软件业务收入(万元) - 反映本地软硬件服务开发能力"
+        source: "0412/分省软件和信息技术服务业主要经济指标_多年期_面板数据.csv"
+        
+    # 维度3：产业数字化/应用渗透 (Enterprise Application)
+    enterprise_application:
+      - name: "ecommerce_enterprise_ratio"
+        desc: "有电子商务交易活动的企业比重(%) - 反映企业级数字渗透率"
+        source: "0412/分省企业信息化及电子商务情况_多年期_面板数据.csv"
+      - name: "ecommerce_sales"
+        desc: "电子商务销售额(亿元) - 反映数字经济变现端规模"
+        source: "0412/分省企业信息化及电子商务情况_多年期_面板数据.csv"
+      - name: "ecommerce_purchases"
+        desc: "电子商务采购额(亿元) - 反映数字经济供应链规模"
+        source: "0412/分省企业信息化及电子商务情况_多年期_面板数据.csv"
+
+# 单列补充：政策牵引力变量
+policy_variables:
+  - name: "policy_attention_energy_digital"
+    desc: "政府工作报告能源数字化关键词词频"
+    source: "0419/能源数字化各省份关键词词频/*.xlsx"
+
+# ----------------------------------------------------
+# 基础控制变量群 (Controls)
+# ----------------------------------------------------
+controls:
+  - name: "pgdp_ln"
+    desc: "人均 GDP 对数 (控制经济发展水平)"
+    source: "衍生计算: 0412/分省GDP / 0412/分省人口"
+  - name: "pgdp_ln_sq"
+    desc: "人均 GDP 对数二次项 (控制EKC环境库兹涅茨曲线倒U型关系)"
+    source: "衍生计算"
+  - name: "ind2_share"
+    desc: "第二产业增加值占比 (控制工业化进程阶段)"
+    source: "0412/分省GDP_多年期_面板数据.csv"
+  - name: "urban_rate"
+    desc: "城镇化率 = 城镇人口 / 辖区常住人口 (控制人口空间集聚效应)"
+    source: "0412/分省人口_多年期_面板数据.csv"
+  - name: "total_energy_consumption_ln"
+    desc: "能源消费总量对数 (万吨标准煤, 控制区域能耗体量基数)"
+    source: "0412/分省主要能源产品消费量_多年期_面板数据.csv"
+
+# ----------------------------------------------------
+# 机制变量 (Mechanisms)
+# 探索数字化是如何降低碳强度的
+# ----------------------------------------------------
+mechanisms:
+  # 机制1：产业结构优化
+  industrial_upgrade:
+    - name: "tertiary_secondary_ratio"
+      desc: "高级化指标：第三产业与第二产业增加值占比"
+      source: "0412/分省GDP_多年期_面板数据.csv"
+      
+  # 机制2：能源利用效率提升
+  energy_efficiency:
+    - name: "energy_intensity_ln"
+      desc: "能源消耗强度对数 (能源消费总量 / GDP)"
+      source: "衍生计算: 0412/主要能源消费量 / 0412/分省GDP"
+      
+  # 机制3：能源供给侧清洁化
+  energy_structure:
+    - name: "clean_energy_prod_share"
+      desc: "清洁能源产量占比 (水电、风电、核电等 / 能源生产总量) (*需视数据表中列字段支持情况合成)"
+      source: "0412/分省主要能源产品产量_多年期_面板数据.csv"
